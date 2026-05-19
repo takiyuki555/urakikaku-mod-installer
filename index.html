@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>takichan セットアップアシスタント</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e1117;
+    --bg2: #161b25;
+    --bg3: #1e2535;
+    --accent: #5b8cff;
+    --accent2: #7faaff;
+    --green: #3dd68c;
+    --yellow: #f5c842;
+    --red: #ff6b6b;
+    --text: #e8edf5;
+    --text2: #8b96b0;
+    --border: rgba(91,140,255,0.15);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ヘッダー */
+  header {
+    background: linear-gradient(135deg, #0d1623 0%, #111827 50%, #0d1f35 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+  }
+  .header-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 800;
+    font-size: 16px;
+    color: var(--accent2);
+    text-decoration: none;
+  }
+  .logo-icon {
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(135deg, var(--accent), #8b5cf6);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+  }
+  .badge-version {
+    background: rgba(91,140,255,0.15);
+    border: 1px solid rgba(91,140,255,0.3);
+    color: var(--accent2);
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 2px 8px;
+    border-radius: 20px;
+  }
+
+  /* ヒーロー */
+  .hero {
+    background: linear-gradient(180deg, #0d1f35 0%, #0e1117 100%);
+    padding: 5rem 2rem 4rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(91,140,255,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-inner {
+    max-width: 700px;
+    margin: 0 auto;
+    position: relative;
+  }
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(91,140,255,0.1);
+    border: 1px solid rgba(91,140,255,0.25);
+    color: var(--accent2);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 1.5rem;
+  }
+  .hero h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #fff 30%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero p {
+    font-size: 1rem;
+    color: var(--text2);
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
+  }
+
+  /* ダウンロードボタン */
+  .dl-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, var(--accent) 0%, #7c3aed 100%);
+    color: #fff;
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    padding: 0.9rem 2.2rem;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 4px 24px rgba(91,140,255,0.3);
+  }
+  .dl-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(91,140,255,0.45);
+  }
+  .dl-btn:active { transform: translateY(0); }
+  .dl-arrow { font-size: 1.2rem; }
+
+  .dl-sub {
+    margin-top: 0.8rem;
+    font-size: 12px;
+    color: var(--text2);
+  }
+
+  /* コンテンツ */
+  .content {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+  }
+
+  /* セクション */
+  .section {
+    margin-bottom: 3rem;
+  }
+  .section-title {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* インストール内容カード */
+  .install-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+  }
+  .install-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: border-color 0.2s;
+  }
+  .install-card:hover { border-color: rgba(91,140,255,0.4); }
+  .install-icon {
+    font-size: 1.6rem;
+    line-height: 1;
+  }
+  .install-name {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .install-desc {
+    font-size: 0.8rem;
+    color: var(--text2);
+    line-height: 1.5;
+  }
+
+  /* スクリーンショット */
+  .screenshot-box {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+  }
+  .screenshot-bar {
+    background: var(--bg3);
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dot-r { background: #ff6b6b; }
+  .dot-y { background: #f5c842; }
+  .dot-g { background: #3dd68c; }
+  .screenshot-title {
+    font-size: 12px;
+    color: var(--text2);
+    margin-left: 8px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* セットアップ画面のモック */
+  .mock-window {
+    padding: 1.5rem;
+  }
+  .mock-header {
+    background: linear-gradient(135deg, #1a2a4a, #1e2535);
+    border-radius: 8px;
+    padding: 10px 16px;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .mock-header-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent2);
+  }
+  .mock-steps {
+    display: flex;
+    gap: 12px;
+    font-size: 11px;
+    color: var(--text2);
+  }
+  .mock-step-active { color: #ff6b6b; font-weight: 700; }
+  .mock-body { padding: 0.5rem 0; }
+  .mock-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin-bottom: 0.8rem;
+  }
+  .mock-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .mock-item {
+    background: var(--bg3);
+    border-radius: 8px;
+    padding: 8px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+  }
+  .mock-item-name { font-weight: 700; }
+  .mock-item-desc { color: var(--text2); font-size: 12px; }
+
+  /* 手順 */
+  .steps-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .step-item {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  .step-num {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    background: linear-gradient(135deg, var(--accent), #7c3aed);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .step-body { flex: 1; padding-top: 4px; }
+  .step-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .step-desc {
+    font-size: 0.85rem;
+    color: var(--text2);
+    line-height: 1.6;
+  }
+
+  /* SmartScreen警告 */
+  .warning-box {
+    background: rgba(245, 200, 66, 0.07);
+    border: 1px solid rgba(245, 200, 66, 0.25);
+    border-radius: 12px;
+    padding: 1.2rem 1.5rem;
+  }
+  .warning-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--yellow);
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .warning-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .warning-step {
+    font-size: 0.85rem;
+    color: var(--text2);
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    line-height: 1.5;
+  }
+  .warning-step-num {
+    background: rgba(245,200,66,0.15);
+    color: var(--yellow);
+    font-size: 11px;
+    font-weight: 700;
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+  }
+
+  /* フッター */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem;
+    text-align: center;
+    color: var(--text2);
+    font-size: 12px;
+  }
+
+  /* アニメーション */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .hero-inner { animation: fadeUp 0.6s ease both; }
+  .install-card { animation: fadeUp 0.5s ease both; }
+  .install-card:nth-child(2) { animation-delay: 0.05s; }
+  .install-card:nth-child(3) { animation-delay: 0.1s; }
+  .install-card:nth-child(4) { animation-delay: 0.15s; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a class="logo" href="#">
+      <div class="logo-icon">🔒</div>
+      takichan
+    </a>
+    <span class="badge-version">v1.0.0 · MC 1.21.1</span>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">🎮 Minecraft 1.21.1 · Fabric</div>
+    <h1>takichan<br>セットアップアシスタント</h1>
+    <p>
+      Java・Fabric・takichan（ModGuard）・SimpleVoiceChatを<br>
+      クリックするだけで自動インストール。
+    </p>
+    <a class="dl-btn" href="takichan_setup_v1.0.0.exe" download>
+      <span class="dl-arrow">⬇</span> ダウンロード（Windows）
+    </a>
+    <p class="dl-sub">takichan_setup_v1.0.0.exe · Windows 10/11対応</p>
+  </div>
+</section>
+
+<div class="content">
+
+  <!-- インストール内容 -->
+  <section class="section">
+    <h2 class="section-title">インストール内容</h2>
+    <div class="install-grid">
+      <div class="install-card">
+        <div class="install-icon">☕</div>
+        <div class="install-name">Java 21</div>
+        <div class="install-desc">Minecraftの動作に必要な実行環境</div>
+      </div>
+      <div class="install-card">
+        <div class="install-icon">🧵</div>
+        <div class="install-name">Fabric 1.21.1</div>
+        <div class="install-desc">MODを動かすためのローダー</div>
+      </div>
+      <div class="install-card">
+        <div class="install-icon">🔒</div>
+        <div class="install-name">takichan</div>
+        <div class="install-desc">許可MODのみ接続を許可するセキュリティMOD</div>
+      </div>
+      <div class="install-card">
+        <div class="install-icon">🎙️</div>
+        <div class="install-name">SimpleVoiceChat</div>
+        <div class="install-desc">近距離ボイスチャットMOD</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ツール画面 -->
+  <section class="section">
+    <h2 class="section-title">ツールの画面</h2>
+    <div class="screenshot-box">
+      <div class="screenshot-bar">
+        <div class="dot dot-r"></div>
+        <div class="dot dot-y"></div>
+        <div class="dot dot-g"></div>
+        <span class="screenshot-title">takichan セットアップアシスタント v1.0.0</span>
+      </div>
+      <div class="mock-window">
+        <div class="mock-header">
+          <div class="mock-header-title">🎮 takichan セットアップアシスタント</div>
+          <div class="mock-steps">
+            <span class="mock-step-active">● ようこそ</span>
+            <span>○ Java</span>
+            <span>○ Fabric</span>
+            <span>○ MOD</span>
+            <span>○ 完了</span>
+          </div>
+        </div>
+        <div class="mock-body">
+          <div class="mock-title">takichan セットアップアシスタントへようこそ！</div>
+          <div class="mock-list">
+            <div class="mock-item">
+              <span class="mock-item-name">☕ Java 21</span>
+              <span class="mock-item-desc">Minecraftの動作に必要</span>
+            </div>
+            <div class="mock-item">
+              <span class="mock-item-name">🧵 Fabric 1.21.1</span>
+              <span class="mock-item-desc">MODを動かすためのローダー</span>
+            </div>
+            <div class="mock-item">
+              <span class="mock-item-name">🔒 takichan (ModGuard)</span>
+              <span class="mock-item-desc">許可MODのみ接続を許可するMOD</span>
+            </div>
+            <div class="mock-item">
+              <span class="mock-item-name">🎙️ SimpleVoiceChat</span>
+              <span class="mock-item-desc">近距離ボイスチャットMOD</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p style="font-size:0.85rem; color:var(--text2);">「次へ」を押していくだけで必要なファイルを自動でダウンロード・インストールします。</p>
+  </section>
+
+  <!-- 使い方 -->
+  <section class="section">
+    <h2 class="section-title">使い方</h2>
+    <div class="steps-list">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">EXEをダウンロードして起動</div>
+          <div class="step-desc">上の「ダウンロード」ボタンからEXEファイルをダウンロードし、ダブルクリックで起動します。</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">「次へ」を押して進める</div>
+          <div class="step-desc">画面の指示に従って「次へ」を押すだけ。Java・Fabric・MODが順番に自動インストールされます。</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Minecraftランチャーで起動</div>
+          <div class="step-desc">インストール完了後、ランチャーのバージョン選択で「fabric-loader-...1.21.1」を選んで起動してください。</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SmartScreen警告 -->
+  <section class="section">
+    <h2 class="section-title">⚠ SmartScreenの警告が出る場合</h2>
+    <div class="warning-box">
+      <div class="warning-title">⚠ Windowsセキュリティの警告について</div>
+      <p style="font-size:0.85rem; color:var(--text2); margin-bottom:0.8rem; line-height:1.6;">
+        ダウンロード後に起動すると、SmartScreenによってブロックされる場合があります。<br>
+        これはダウンロード数が少ないファイルに対して自動的にかかるものです。以下の手順で起動できます。
+      </p>
+      <div class="warning-steps">
+        <div class="warning-step">
+          <div class="warning-step-num">1</div>
+          <span>「WindowsによってPCが保護されました」という画面で <strong style="color:var(--text);">「詳細情報」</strong> をクリック</span>
+        </div>
+        <div class="warning-step">
+          <div class="warning-step-num">2</div>
+          <span>画面下部に表示される <strong style="color:var(--text);">「実行」</strong> ボタンをクリック</span>
+        </div>
+        <div class="warning-step">
+          <div class="warning-step-num">3</div>
+          <span>セットアップアシスタントが起動します</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  takichan セットアップアシスタント v1.0.0 · Minecraft Java Edition 1.21.1 専用
+</footer>
+
+</body>
+</html>
